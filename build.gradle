@@ -1,0 +1,80 @@
+group 'demo'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '2.1.5.RELEASE'
+        classpath group: 'org.yaml', name: 'snakeyaml', version: '1.24'
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Starter Web
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.5.RELEASE'
+
+    // JSON libraries
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-jsonSchema', version: '2.9.9'
+
+    // Finance Quote API
+    compile group: 'com.yahoofinance-api', name: 'YahooFinanceAPI', version: '3.15.0'
+    
+    // Testing libraries
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("junit:junit")
+}
+
+// Build a version properties file for the application
+task appendVersionToVersionProperties {
+    Properties props = new Properties()
+    props.put('version.system_name', rootProject.name)
+    props.put('version.numbering', version)
+    props.put('version.dtap', 'development')
+    props.put('version.build_timestamp', new Date().format("yyyy-MM-dd HH:mm:ss"))
+    def propFile = new File("src/main/resources/configVersion.properties")
+    propFile.createNewFile()
+    props.store(propFile.newWriter(), null)
+}
+
+// this will run your task after the java compilation and resource processing
+processResources.finalizedBy appendVersionToVersionProperties
+
+// Skip Test Cases which were prepared for development internal test during build. They are not used for Sanity Test.
+test {
+    exclude 'demo/stockmgr/developers/**'
+}
+
+jar {
+    enabled = true
+    baseName = rootProject.name
+    archiveName = rootProject.name + '.jar'
+}
+
+/**
+task runH2Script(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    def cfg = (new org.yaml.snakeyaml.Yaml()).load(new File('src/main/resources/application.yml').newInputStream())
+
+    main = 'org.h2.tools.Script'
+    args '-url', cfg.spring.datasource.url, '-user', cfg.spring.datasource.username
+}
+**/
