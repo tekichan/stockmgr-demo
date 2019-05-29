@@ -1,0 +1,7 @@
+###
+# Application Specific Configuration
+###
+stockmgr:
+  rest:
+    date_pattern: yyyyMMdd
+    default_fromdate: 20180101

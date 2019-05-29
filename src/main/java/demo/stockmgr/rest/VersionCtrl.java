@@ -1,5 +1,6 @@
 package demo.stockmgr.rest;
 
+import demo.stockmgr.config.AppConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
@@ -20,8 +21,10 @@ import java.util.stream.Stream;
 @RestController
 @PropertySource("classpath:configVersion.properties")
 public class VersionCtrl {
-    public static final String URL_VERSION = "/rest/version";
-    public static final String FIELD_VERSION = "version_info";
+    /** URL for Version Information */
+    private static final String URL_VERSION = AppConfig.REST_PREFIX + "/version";
+    /** Response Field for Version Information */
+    private static final String FIELD_VERSION = "version_info";
 
     @Value("${version.system_name}")
     private String systemName;
@@ -38,7 +41,6 @@ public class VersionCtrl {
     /**
      * Restful Endpoint to describe Version
      * @return  Restful Endpoint
-     * @throws Exception
      */
     @RequestMapping(
             value=URL_VERSION
@@ -46,11 +48,15 @@ public class VersionCtrl {
             , produces={MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody
-    public Map<String, Object> getVersionJson() throws Exception {
+    public Map<String, Object> getVersionJson() {
         return this.getVersionInfo();
     }
 
-    private Map<String, Object> getVersionInfo() throws Exception {
+    /**
+     * Construct Version Information into Map<String, Object> object
+     * @return  Version Information in Map
+     */
+    private Map<String, Object> getVersionInfo() {
         return Collections.unmodifiableMap(Stream.of(
                 new AbstractMap.SimpleEntry<>(FIELD_VERSION, Collections.unmodifiableMap(Stream.of(
                         new AbstractMap.SimpleEntry<>("system_name", systemName),

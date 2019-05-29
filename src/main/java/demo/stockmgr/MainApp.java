@@ -10,6 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class MainApp {
+    /**
+     * Main static method of this application
+     * @param args  arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(MainApp.class, args);
     }

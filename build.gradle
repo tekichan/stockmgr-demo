@@ -42,12 +42,21 @@ dependencies {
     testCompile("junit:junit")
 }
 
+// Determine Profile for processResources task
+if (hasProperty("profile")) {
+    ext.hasProfile = true
+    ext.dtap = ext.profile
+} else {
+    ext.hasProfile = false
+    ext.dtap = "dev"
+}
+
 // Build a version properties file for the application
 task appendVersionToVersionProperties {
     Properties props = new Properties()
     props.put('version.system_name', rootProject.name)
     props.put('version.numbering', version)
-    props.put('version.dtap', 'development')
+    props.put('version.dtap', dtap)
     props.put('version.build_timestamp', new Date().format("yyyy-MM-dd HH:mm:ss"))
     def propFile = new File("src/main/resources/configVersion.properties")
     propFile.createNewFile()
