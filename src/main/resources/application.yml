@@ -5,3 +5,6 @@ stockmgr:
   rest:
     date_pattern: yyyyMMdd
     default_fromdate: 20180101
+    timezone: HKT
+  ta:
+    default_timeframe: 250

@@ -1,15 +1,13 @@
-package demo.stockmgr.rest;
+package demo.stockmgr.except;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Restful Response for Exception
  * @author Teki Chan
  * @since 29 May 2019
  */
-public class ExceptionResponse {
+public class ExceptionResponse implements IExceptionResponse {
     private String className;
     private String message;
     private List<String> stacktraceList;
@@ -17,24 +15,18 @@ public class ExceptionResponse {
     /**
      * Default Constructor
      */
-    public ExceptionResponse() {}
+    private ExceptionResponse() {}
 
     /**
-     * Constructor with given Exception
-     * @param ex    Given Exception
+     * Constructor with given Exception detail
+     * @param className
+     * @param message
+     * @param stacktraceList
      */
-    public ExceptionResponse(Exception ex) {
-        this.parseException(ex);
-    }
-
-    /**
-     * Parse Exception object to Exception Response
-     * @param ex    Exception object thrown
-     */
-    public void parseException(Exception ex) {
-        this.className = ex.getClass().getName();
-        this.message = ex.getMessage();
-        this.stacktraceList = Arrays.stream(ex.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList());
+    public ExceptionResponse(String className, String message, List<String> stacktraceList) {
+        this.className = className;
+        this.message = message;
+        this.stacktraceList = stacktraceList;
     }
 
     /**

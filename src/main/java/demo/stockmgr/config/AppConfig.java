@@ -19,6 +19,7 @@ public class AppConfig {
     public static final String REST_PREFIX = "/rest";
 
     private RestConfig rest = new RestConfig();
+    private TaConfig ta = new TaConfig();
 
     /**
      * Setter of Restful related configuration
@@ -33,57 +34,19 @@ public class AppConfig {
     public RestConfig getRest() { return this.rest; }
 
     /**
-     * Getter of Date Pattern used in Restful API call
-     * @return  Date Pattern
-     */
-    public String getRestDatePattern() { return rest.getDatePattern(); }
-
-    /**
      * Getter of Default From Date in Calendar object for Restful API call
      * @return  Default From Date in Calendar
      * @throws ParseException
      */
     public Calendar getRestDefaultFromCalendar() throws ParseException {
-        return DateUtils.getDateFromString(rest.getDefaultFromdate(), getRestDatePattern());
+        return DateUtils.getDateFromString(rest.getDefaultFromdate(), rest.getDatePattern(), rest.getTimezone());
     }
 
-    /**
-     * Restful related configuration
-     */
-    public static class RestConfig {
-        private String datePattern;
-        private String defaultFromdate;
+    public TaConfig getTa() {
+        return ta;
+    }
 
-        /**
-         * Getter of Date Pattern
-         * @return  Date Pattern
-         */
-        public String getDatePattern() {
-            return datePattern;
-        }
-
-        /**
-         * Setter of Date Pattern
-         * @param datePattern   Date Pattern
-         */
-        public void setDatePattern(String datePattern) {
-            this.datePattern = datePattern;
-        }
-
-        /**
-         * Getter of Default From Date String
-         * @return  Default From Date String
-         */
-        public String getDefaultFromdate() {
-            return defaultFromdate;
-        }
-
-        /**
-         * Setter of Default From Date String
-         * @param defaultFromdate   Default From Date String
-         */
-        public void setDefaultFromdate(String defaultFromdate) {
-            this.defaultFromdate = defaultFromdate;
-        }
+    public void setTa(TaConfig ta) {
+        this.ta = ta;
     }
 }
