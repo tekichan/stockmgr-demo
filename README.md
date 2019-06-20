@@ -20,10 +20,57 @@ The mentioned 10 Object Oriented Design principles are:
 - Delegation Principle
 
 ## Don't Repeat Yourself (DRY)
+
+For any programming, it is always true to **NOT REPEAT YOURSELF**. Coding in Java, an OOP language, it is wise to abstract common logic in a reusable block.
+
+Both `SmaService` and `BollingerService` need stock prices as input. Fetching the price list needs a logic of date range inputs. The logic is common in both service classes, also common in basic stock quote. As a result, instead of repeating the same code triple, share the common method in the three classes. 
+
+`StockQuoteService.java` provides a Common Method for fetching historical stock quote list.
+```java
+    public List<HistoricalQuote> getHistoricalQuoteList(
+            String stockCode
+            , Optional<String> fromDateOptional
+            , Optional<String> toDateOptional
+    ) throws IOException, ParseException {
+        Calendar fromDateCal = DateUtils.getDateFromOptional(
+                fromDateOptional
+                , appConfig.getRest().getDatePattern()
+                , appConfig.getRest().getTimezone()
+        ); // Get From Date
+        Calendar toDateCal = DateUtils.getDateFromOptional(
+                toDateOptional
+                , appConfig.getRest().getDatePattern()
+                , appConfig.getRest().getTimezone()
+        ); // Get To Date
+        return getHistoricalQuoteList(stockCode, fromDateCal, toDateCal);
+    }
+```
+
 ## Encapsulation
 
 Every internal logic should be encapsulated from the external. Any internal change does not impact the external. Thus it makes testing and maintenance easier. 
-For example, Factory Design Pattern encapsulates the creation logic. 
+For example, Factory Design Pattern encapsulates the creation logic. In this case, external parties will not be impacted the variety of creation logic.
+
+`ExceptionResponseFactory.java` encapsulates Response Entity Creation logic of two Exception classes.
+```java
+    public static IExceptionResponse toExceptionResponse(Exception ex) {
+        if (ex instanceof ParseException) {
+            ParseException pex = (ParseException) ex;
+            return new ParseExceptionResponse(
+                    pex.getClass().getName()
+                    , pex.getMessage()
+                    , Arrays.stream(pex.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                    , pex.getErrorOffset()
+            );
+        } else {
+            return new ExceptionResponse(
+                    ex.getClass().getName()
+                    , ex.getMessage()
+                    , Arrays.stream(ex.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+            );
+        }
+    }
+```
 
 ## S: Single Responsibility Principle (SRP)
 
