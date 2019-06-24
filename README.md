@@ -76,22 +76,86 @@ For example, Factory Design Pattern encapsulates the creation logic. In this cas
 
 A class should only have a single responsibility. This is because more functions makes more coupling, thus much complexity and testing effort.
 
+Taking `TaIndicatorCtrl.java` as an example, if you put the logic into `StockQuoteCtrl.java`, you may reduce some lines of codes 
+(Saved a line of `SmaService` declaration?). However you may the class becoming complicated and increases complexity of maintanence.
+For the same reason, you should not put `SmaService.java` or `BollingerService.java` into the Restful Controller class either. If so,
+any change of Restful API, SMA or Bollinger logic will impact the remaining, thus it increases development and testing efforts.
+
 ## O: Open Close Design Principle
 
 Open for extension, close for modification.
+
+```java
+SMAIndicator smaIndicator = new SMAIndicator(closePrice, timeFrame);
+```
+
+Simple Moving Average (SMA) is a frequently used indicator. It is not only applicable to price but also other figures like volume.
+If we want to have SMA on Open Price, do we need to create another indicator? No. The class `SMAIndicator` will calculate
+the list of values according the first parameter. If the parameter is Close Price, for example, the SMA is on Close Price.
 
 ## L: Liskov Substitution Principle (LSP)
 
 Methods using superclass type should work well with objects of subclass without any issue.
 
+```java
+List<SmaItem> smaList = new ArrayList<>();
+```
+`List` and `ArrayList` are typical examples of LSP. Developers totally feel safe to call methods, e.g. `size()` and `iterator()`
+ of `List` without care of implementation or subclass, which could be `ArrayList` or `Vector` or `AttributeList`. 
+Those methods are still applicable and aligned with the expected results. The Restful Controller classes can convert
+the resulted List to JSON array in a generic way safely.
+
 ## I: Interface Segregation Principle (ISP)
 
 Do not implement an interface if it is not used.
+
+OOP prefers calling the interface rather the implementation for abstraction. Callers have expectation on the methods they call.
+If you call a method of a class and it does not behave as you expect if the implementation is changed to another, then it 
+could lead subsequent logic broken.
+
+```java
+public int getErrorOffset()
+```
+This is a method of `ParseExceptionResponse` implementation `IExceptionResponse`. If it were made to be a method of the interface,
+then `ExceptionResponse` has to make it as well but the method is not meaningful there. If we have a logic on displaying Error 
+Offset, it would get the same meaningless result from calling it from `ExceptionResponse`.
 
 ## D: Dependency Injection
 
 The caller object does not depend on the creation code of the receiver because object creation code is centralized. It is easy to do mock test and maintain.
 For example, Spring Framework utilizes XML or Aspect Oriented Programming to implement it.  
+
+Spring Framework is famous at DI or Inversion Of Control (IoC). The main application does not need to know what classes
+and how they are constructed. They can be configured by either annotation or configuration.
+
+```java
+@SpringBootApplication
+public class MainApp {
+    /**
+     * Main static method of this application
+     * @param args  arguments
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(MainApp.class, args);
+    }
+}
+```
+The main application class is so simple and clear. Either I created VersionCtrl, StockQuoteCtrl or more, it remains the same.
+
+In StockQuoteService,
+```java
+@Service
+public class StockQuoteService {
+```
+
+In StockQuoteCtrl,
+```java
+    @Autowired
+    private StockQuoteService stockQuoteService;
+```
+
+`@Autowired` is commonly used annotation for DI. Spring creates `StockQuoteService` based on `@Service`. `@Autowired` in
+other classes can reference an instance of `StockQuoteService` which has been constructed in advance.
 
 ## Favor Composition over Inheritance
 
