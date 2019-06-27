@@ -25,7 +25,7 @@ For any programming, it is always true to **NOT REPEAT YOURSELF**. Coding in Jav
 
 Both `SmaService` and `BollingerService` need stock prices as input. Fetching the price list needs a logic of date range inputs. The logic is common in both service classes, also common in basic stock quote. As a result, instead of repeating the same code triple, share the common method in the three classes. 
 
-`StockQuoteService.java` provides a Common Method for fetching historical stock quote list.
+`StockQuoteService` provides a Common Method for fetching historical stock quote list.
 ```java
     public List<HistoricalQuote> getHistoricalQuoteList(
             String stockCode
@@ -51,7 +51,7 @@ Both `SmaService` and `BollingerService` need stock prices as input. Fetching th
 Every internal logic should be encapsulated from the external. Any internal change does not impact the external. Thus it makes testing and maintenance easier. 
 For example, Factory Design Pattern encapsulates the creation logic. In this case, external parties will not be impacted the variety of creation logic.
 
-`ExceptionResponseFactory.java` encapsulates Response Entity Creation logic of two Exception classes.
+`ExceptionResponseFactory` encapsulates Response Entity Creation logic of two Exception classes.
 ```java
     public static IExceptionResponse toExceptionResponse(Exception ex) {
         if (ex instanceof ParseException) {
@@ -76,7 +76,7 @@ For example, Factory Design Pattern encapsulates the creation logic. In this cas
 
 A class should only have a single responsibility. This is because more functions makes more coupling, thus much complexity and testing effort.
 
-Taking `TaIndicatorCtrl.java` as an example, if you put the logic into `StockQuoteCtrl.java`, you may reduce some lines of codes 
+Taking `TaIndicatorCtrl` as an example, if you put the logic into `StockQuoteCtrl.java`, you may reduce some lines of codes 
 (Saved a line of `SmaService` declaration?). However you may the class becoming complicated and increases complexity of maintanence.
 For the same reason, you should not put `SmaService.java` or `BollingerService.java` into the Restful Controller class either. If so,
 any change of Restful API, SMA or Bollinger logic will impact the remaining, thus it increases development and testing efforts.
@@ -140,15 +140,15 @@ public class MainApp {
     }
 }
 ```
-The main application class is so simple and clear. Either I created VersionCtrl, StockQuoteCtrl or more, it remains the same.
+The main application class is so simple and clear. Either I created `VersionCtrl`, `StockQuoteCtrl` or more, it remains the same.
 
-In StockQuoteService,
+In `StockQuoteService`,
 ```java
 @Service
 public class StockQuoteService {
 ```
 
-In StockQuoteCtrl,
+In `StockQuoteCtrl`,
 ```java
     @Autowired
     private StockQuoteService stockQuoteService;
@@ -159,11 +159,70 @@ other classes can reference an instance of `StockQuoteService` which has been co
 
 ## Favor Composition over Inheritance
 
+Composition is HAS-A relationship while Inheritance is IS-A relationship. Composition gives more flexibility to use a base class
+while Inheritance has more restriction on a subsequent class. "Favor" does not mean always. You should always think about
+"Should I inherit from the base class?".
+
+For example in `SmaService`,
+```java
+@Service
+public class SmaService {
+    ......
+    
+    /** Stock Quote Service */
+    @Autowired
+    private StockQuoteService stockQuoteService;
+
+    /**
+     * Get SMA value list
+     */
+    public List<SmaItem> getSmaList(
+            String stockCode
+            , Optional<String> fromDateOptional
+            , Optional<String> toDateOptional
+            , Optional<Integer> timeFrameOptional
+    ) throws IOException, ParseException {
+        List<HistoricalQuote> quoteList = stockQuoteService.getHistoricalQuoteList(stockCode, fromDateOptional, toDateOptional);
+        ......
+    }
+}
+```
+`SmaService` needs to append a SMA value with each stock quote. The above logic can work the same if `SmaService` inherits `StockQuoteService`
+and `SmaItem` inherits `HistoricalQuote`. If it is the case, `SmaItem` must have all fields of `HistoricalQuote` in which some fields are not
+relevant to SMA. More or less future functions in `StockQuoteService` will need `SmaService` to provide but they may not used in SMA's case.
+This will create much burden without value added. 
+
 ## Programming for Interface not Implementation
 
-Interact with superclass, not subclass.
+Interact with superclass, not subclass. Same reason with LSP.
 
 ## Delegation Principle
+
+Remember SRP. Don't create a massive can-do-all class. It is not only mass but also a mess. Delegate non-core functions to other classes
+for avoiding code duplication and making better maintenance.
+
+```java
+    public static TimeSeries geTimeSeries(List<HistoricalQuote> quoteList, String symbol) {
+        TimeSeries series = new BaseTimeSeries.SeriesBuilder().withName(symbol).build();
+        quoteList.forEach(quote -> {
+                series.addBar(
+                        DateUtils.getZonedDateTime(quote.getDate())
+                        , quote.getOpen()
+                        , quote.getHigh()
+                        , quote.getLow()
+                        , quote.getClose()
+                        , quote.getVolume()
+                );
+        });
+        return series;
+    }
+```
+
+```java
+    TimeSeries timeSeries = TaUtils.geTimeSeries(quoteList, stockCode);
+```
+Getting TimeSeries is always used in many scenarios. Rather than repeating the logic in each class, simply create a utility class
+to delegate the logic to it. Then caller classes will have much cleaner codes.
 
 ## Appendix A - Program Overview
 This program is to provide stock price quotes and technical analysis indicators via Restful APIs. 
