@@ -10,6 +10,8 @@ import Form from 'react-bootstrap/Form';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
+import { callStockQuote } from './StockMgrDemoService.js';
+
 const options = {
   title: {
     text: 'My chart'
@@ -31,6 +33,25 @@ class StockMgrDemoApp extends Component {
      */
     constructor(props) {
         super(props);
+
+        this.state = {
+            stockCode: ''
+        };
+
+        this.handleStockDetail = this.handleStockDetail.bind(this);
+        this.processStockQuote = this.processStockQuote.bind(this);
+        this.errorStockQuote = this.errorStockQuote.bind(this);
+    }
+
+    handleStockDetail(_event) {
+        callStockQuote(this.state.stockCode, this.processStockQuote, this.errorStockQuote);
+    }
+
+    processStockQuote(_response) {
+
+    }
+
+    errorStockQuote(_error) {
     }
 
     /**
@@ -39,9 +60,19 @@ class StockMgrDemoApp extends Component {
     render() {
         return (
 <Container>
+  <Form>
   <Row>
     <Col>
-      <Form.Control placeholder="Stock Code" />
+      <Form.Control placeholder="Stock Code"
+                    value={this.state.stockCode}
+                    onChange={
+                        (_event) => {
+                            this.setState({
+                                stockCode: _event.target.value
+                            });
+                        }
+                    }
+      />
     </Col>
     <Col>
       <Form.Control as="select">
@@ -52,9 +83,10 @@ class StockMgrDemoApp extends Component {
       </Form.Control>
     </Col>
     <Col>
-       <Button variant="primary" type="submit">Refresh</Button>
+       <Button variant="primary" type="button" onClick={this.handleStockDetail}>Refresh</Button>
     </Col>
   </Row>
+  </Form>
   <Row>
     <Col>
       <HighchartsReact
