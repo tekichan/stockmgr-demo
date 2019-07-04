@@ -50,11 +50,10 @@ public class TaIndicatorCtrl {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping(
+    @GetMapping(
             value={
                     URL_SMA
             }
-            , method=RequestMethod.GET
             , produces={
                     MediaType.APPLICATION_JSON_VALUE
             }
@@ -79,11 +78,10 @@ public class TaIndicatorCtrl {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping(
+    @GetMapping(
             value={
                     URL_BBAND
             }
-            , method=RequestMethod.GET
             , produces={
                 MediaType.APPLICATION_JSON_VALUE
             }

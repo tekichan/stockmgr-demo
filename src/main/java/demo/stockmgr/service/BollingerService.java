@@ -2,13 +2,11 @@ package demo.stockmgr.service;
 
 import demo.stockmgr.config.AppConfig;
 import demo.stockmgr.entity.BollingerItem;
-import demo.stockmgr.entity.SmaItem;
 import demo.stockmgr.util.TaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.indicators.EMAIndicator;
-import org.ta4j.core.indicators.SMAIndicator;
 import org.ta4j.core.indicators.bollinger.BollingerBandsLowerIndicator;
 import org.ta4j.core.indicators.bollinger.BollingerBandsMiddleIndicator;
 import org.ta4j.core.indicators.bollinger.BollingerBandsUpperIndicator;

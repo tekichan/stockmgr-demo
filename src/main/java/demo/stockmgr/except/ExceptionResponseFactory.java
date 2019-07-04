@@ -13,7 +13,12 @@ import java.util.stream.Collectors;
  * @author Teki Chan
  * @since 30 May 2019
  */
-public class ExceptionResponseFactory {
+public final class ExceptionResponseFactory {
+    /**
+     * Private Constructor for static method
+     */
+    private ExceptionResponseFactory() {}
+
     /**
      * Parse Exception object to Exception Response
      * @param ex    Exception object thrown

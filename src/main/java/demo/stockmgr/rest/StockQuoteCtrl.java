@@ -41,11 +41,10 @@ public class StockQuoteCtrl {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping(
+    @GetMapping(
             value={
                     URL_STOCKQUOTE
             }
-            , method=RequestMethod.GET
             , produces={
                     MediaType.APPLICATION_JSON_VALUE
             }

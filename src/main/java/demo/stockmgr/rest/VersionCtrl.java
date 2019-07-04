@@ -4,10 +4,7 @@ import demo.stockmgr.config.AppConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -42,9 +39,8 @@ public class VersionCtrl {
      * Restful Endpoint to describe Version
      * @return  Restful Endpoint
      */
-    @RequestMapping(
+    @GetMapping(
             value=URL_VERSION
-            , method= RequestMethod.GET
             , produces={MediaType.APPLICATION_JSON_VALUE}
     )
     @ResponseBody

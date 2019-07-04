@@ -11,7 +11,12 @@ import java.util.List;
  * @author Teki Chan
  * @since 30 May 2019
  */
-public class TaUtils {
+public final class TaUtils {
+    /**
+     * Private constructor for utility class
+     */
+    private TaUtils() {}
+
     /**
      * Create TimeSeries object by given Historical Quote List and Stock Symbol
      * @param quoteList List of Historical Quote
@@ -20,7 +25,7 @@ public class TaUtils {
      */
     public static TimeSeries geTimeSeries(List<HistoricalQuote> quoteList, String symbol) {
         TimeSeries series = new BaseTimeSeries.SeriesBuilder().withName(symbol).build();
-        quoteList.forEach(quote -> {
+        quoteList.forEach(quote ->
                 series.addBar(
                         DateUtils.getZonedDateTime(quote.getDate())
                         , quote.getOpen()
@@ -28,8 +33,8 @@ public class TaUtils {
                         , quote.getLow()
                         , quote.getClose()
                         , quote.getVolume()
-                );
-        });
+                )
+        );
         return series;
     }
 }

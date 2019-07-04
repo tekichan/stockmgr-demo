@@ -14,6 +14,11 @@ import java.util.TimeZone;
  */
 public final class DateUtils {
     /**
+     * Private Constructor for utility class
+     */
+    private DateUtils() {}
+
+    /**
      * Get Calendar object from String Optional
      * @param yyyyMMddOptional  String Optional of Date
      * @param datePattern   Date Pattern
@@ -22,8 +27,7 @@ public final class DateUtils {
      * @throws ParseException
      */
     public static Calendar getDateFromOptional(Optional<String> yyyyMMddOptional, String datePattern, String timeZone) throws ParseException {
-        if ((yyyyMMddOptional != null)
-                && yyyyMMddOptional.isPresent()
+        if (yyyyMMddOptional.isPresent()
                 && (yyyyMMddOptional.get().length() == datePattern.length())
         ) {
             return getDateFromString(yyyyMMddOptional.get(), datePattern, timeZone);
