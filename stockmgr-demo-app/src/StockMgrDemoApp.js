@@ -379,7 +379,6 @@ class StockMgrDemoApp extends Component {
                 ];
             }
         );
-        /*
         hsSeries.push(
             {
                 type: 'candlestick',
@@ -389,7 +388,6 @@ class StockMgrDemoApp extends Component {
                 zIndex: 2
             }
         );
-        */
         if (this.state.indicator === 'bband') {
             var upperBBand = _taResp['data'].map(
                 (_item, _idx, _arr) => {
