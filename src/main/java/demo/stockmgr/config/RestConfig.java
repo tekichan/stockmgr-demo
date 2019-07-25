@@ -9,6 +9,7 @@ public class RestConfig {
     private String datePattern;
     private String defaultFromdate;
     private String timezone;
+    private String allowedCors;
 
     /**
      * Getter of Date Pattern
@@ -56,5 +57,21 @@ public class RestConfig {
      */
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    /**
+     * Getter of Allowed CORS
+     * @return  Allowed CORS
+     */
+    public String getAllowedCors() {
+        return allowedCors;
+    }
+
+    /**
+     * Setter of Allowed CORS
+     * @param allowedCors   Allowed CORS
+     */
+    public void setAllowedCors(String allowedCors) {
+        this.allowedCors = allowedCors;
     }
 }
