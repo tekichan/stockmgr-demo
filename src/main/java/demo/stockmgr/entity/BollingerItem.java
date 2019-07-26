@@ -1,6 +1,6 @@
 package demo.stockmgr.entity;
 
-import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 /**
  * Item Entity of Bollinger indicator
@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 public class BollingerItem {
     private String symbol;
     private Integer timeFrame;
-    private ZonedDateTime dateTime;
+    private Calendar date;
     private Double upperBBand;
     private Double middleBBand;
     private Double lowerBBand;
@@ -31,12 +31,12 @@ public class BollingerItem {
         this.timeFrame = timeFrame;
     }
 
-    public ZonedDateTime getDateTime() {
-        return dateTime;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setDateTime(ZonedDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
     public Double getUpperBBand() {

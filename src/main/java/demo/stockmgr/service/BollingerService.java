@@ -17,6 +17,7 @@ import yahoofinance.histquotes.HistoricalQuote;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class BollingerService {
             BollingerItem bollingerItem = new BollingerItem();
             bollingerItem.setSymbol(stockCode);
             bollingerItem.setTimeFrame(timeFrame);
-            bollingerItem.setDateTime(timeSeries.getBar(i).getEndTime());
+            bollingerItem.setDate(GregorianCalendar.from(timeSeries.getBar(i).getEndTime()));
             bollingerItem.setMiddleBBand(middleBBand.getValue(i).doubleValue());
             bollingerItem.setLowerBBand(lowBBand.getValue(i).doubleValue());
             bollingerItem.setUpperBBand(upBBand.getValue(i).doubleValue());

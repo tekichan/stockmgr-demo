@@ -1,6 +1,6 @@
 package demo.stockmgr.entity;
 
-import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 /**
  * Item Entity of Simple Moving Average
@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 public class SmaItem {
     private String symbol;
     private Integer timeFrame;
-    private ZonedDateTime dateTime;
+    private Calendar date;
     private Double smaValue;
 
     public String getSymbol() {
@@ -37,11 +37,11 @@ public class SmaItem {
         this.smaValue = smaValue;
     }
 
-    public ZonedDateTime getDateTime() {
-        return dateTime;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setDateTime(ZonedDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 }

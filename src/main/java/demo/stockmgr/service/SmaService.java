@@ -12,9 +12,7 @@ import yahoofinance.histquotes.HistoricalQuote;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service for Simple Moving Average
@@ -60,7 +58,7 @@ public class SmaService {
             SmaItem smaItem = new SmaItem();
             smaItem.setSymbol(stockCode);
             smaItem.setTimeFrame(timeFrame);
-            smaItem.setDateTime(timeSeries.getBar(i).getEndTime());
+            smaItem.setDate(GregorianCalendar.from(timeSeries.getBar(i).getEndTime()));
             smaItem.setSmaValue(smaIndicator.getValue(i).doubleValue());
             smaList.add(smaItem);
         }
