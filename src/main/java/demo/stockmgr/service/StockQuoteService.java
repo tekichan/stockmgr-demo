@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Stock Quote related Service
@@ -81,19 +82,20 @@ public class StockQuoteService {
             , Calendar toDateCal
     ) throws IOException, ParseException {
         Stock stockObject = YahooFinance.get(stockCode);    // Get Stock Code
-
+        List<HistoricalQuote> quoteList;
         if (fromDateCal == null && toDateCal == null) {
             // No Date parameter is given, return the default history
-            return stockObject.getHistory(Interval.DAILY);
+            quoteList = stockObject.getHistory(Interval.DAILY);
         } else if (fromDateCal == null) {
             // Only To Date parameter is given, return the history from the very beginning
-            return stockObject.getHistory(appConfig.getRestDefaultFromCalendar(), toDateCal, Interval.DAILY);
+            quoteList = stockObject.getHistory(appConfig.getRestDefaultFromCalendar(), toDateCal, Interval.DAILY);
         } else if (toDateCal == null) {
             // Only From Date parameter is given, return the history till today
-            return stockObject.getHistory(fromDateCal, Interval.DAILY);
+            quoteList = stockObject.getHistory(fromDateCal, Interval.DAILY);
         } else {
             // Both Date parameters are given, return the history ranged
-            return stockObject.getHistory(fromDateCal, toDateCal, Interval.DAILY);
+            quoteList = stockObject.getHistory(fromDateCal, toDateCal, Interval.DAILY);
         }
+        return quoteList.stream().filter(quote -> quote.getClose() != null).collect(Collectors.toList());
     }
 }
