@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import ReactDOM from 'react-dom'
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -93,7 +94,6 @@ class StockMgrDemoApp extends Component {
 
         this.state = {
             stockCode: ''
-            , hsOption: stockOptions
             , indicator: 'sma'
             , timeFrame: 20
         };
@@ -105,7 +105,17 @@ class StockMgrDemoApp extends Component {
     }
 
     componentDidMount() {
-      this.chartRef = React.createRef();
+        this.chartRef = React.createRef();
+        this.hsElement = React.createElement(
+            HighchartsReact
+            , {
+                highcharts: Highcharts
+                , constructorType: 'stockChart'
+                , options: stockOptions
+                , ref: this.chartRef
+            }
+        );
+        ReactDOM.render(this.hsElement, document.getElementById('divHighStock'));
     }
 
     handleStockDetail(_event) {
@@ -136,9 +146,19 @@ class StockMgrDemoApp extends Component {
             },
             series: _hsSeries
         };
-        this.setState({
-            hsOption: {...stockOptions, ...newChange}
-        });
+        var hsOption = {...stockOptions, ...newChange};
+
+        ReactDOM.unmountComponentAtNode(document.getElementById('divHighStock'));
+        this.hsElement = React.createElement(
+            HighchartsReact
+            , {
+                highcharts: Highcharts
+                , constructorType: 'stockChart'
+                , options: hsOption
+                , ref: this.chartRef
+            }
+        );
+        ReactDOM.render(this.hsElement, document.getElementById('divHighStock'));
     }
 
     processStockQuoteTa(_quoteResp, _taResp) {
@@ -266,7 +286,6 @@ class StockMgrDemoApp extends Component {
             console.log('Adding Simple Moving Average');
         }
 
-        console.log(hsSeries);
         this.plotChart(hsSeries);
     }
 
@@ -312,12 +331,7 @@ class StockMgrDemoApp extends Component {
   </Form>
   <Row>
     <Col>
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={'stockChart'}
-          options={this.state.hsOption}
-          ref={this.chartRef}
-        />
+        <div id='divHighStock'></div>
     </Col>
   </Row>
 </Container>

@@ -228,3 +228,8 @@ to delegate the logic to it. Then caller classes will have much cleaner codes.
 This program is to provide stock price quotes and technical analysis indicators via Restful APIs. 
 This uses [Spring Boot](https://spring.io/projects/spring-boot) for rapid development with dependency injection framework support.
 Stock price quotes which come from [Yahoo! Finance](https://finance.yahoo.com/) are retrieved by an unofficial Java library called [Quotes API for Yahoo Finance](https://financequotes-api.com/).
+
+On the frontend side, in order to visualize the stock price data, [Highcharts React](https://github.com/highcharts/highcharts-react), which provides interactive charts in [React JS](https://reactjs.org/), is used.
+The frontend allows to input a Yahoo! Finance code of a stock or an index, as well as to select a Technical Analysis indicator. The chart is refreshed when Refresh button is pressed.
+
+![StockMgr-Demo](./doc/stockmgr-demo.gif)  
