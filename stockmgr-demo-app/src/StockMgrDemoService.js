@@ -6,6 +6,12 @@ const urlDomain = "";
 const dateFormat = 'YYYYMMDD';
 const maxYearAgo = 5;
 
+/**
+ * Call Stock Quote API
+ * @param stockCode          Stock Code
+ * @param _cbProcessResp     Callback function of Response Processor
+ * @param _cbProcessError    Callback function of Error Processor
+ */
 export function callStockQuote(stockCode, _cbProcessResp, _cbProcessError) {
     var urlStockQuote = urlDomain + "/rest/stock/"
                         + stockCode
@@ -24,6 +30,14 @@ export function callStockQuote(stockCode, _cbProcessResp, _cbProcessError) {
     });
 }
 
+/**
+ * Call TA indicator API
+ * @param stockCode          Stock Code
+ * @param indicator          Indicator Type
+ * @param timeFrame          Time Frame of the indicator
+ * @param _cbProcessResp     Callback function of Response Processor
+ * @param _cbProcessError    Callback function of Error Processor
+ */
 export function callTaIndicator(stockCode, indicator, timeframe, _cbProcessResp, _cbProcessError) {
     var urlTaIndicator = urlDomain + "/rest/" + indicator + "/"
                         + stockCode
@@ -43,6 +57,14 @@ export function callTaIndicator(stockCode, indicator, timeframe, _cbProcessResp,
     });
 }
 
+/**
+ * Call Stock Quote and TA indicator APIs
+ * @param stockCode          Stock Code
+ * @param indicator          Indicator Type
+ * @param timeFrame          Time Frame of the indicator
+ * @param _cbProcessResp     Callback function of Response Processor
+ * @param _cbProcessError    Callback function of Error Processor
+ */
 export function callStockQuoteTa(stockCode, indicator, timeframe, _cbProcessResp, _cbProcessError) {
     var fromDate = moment().subtract(maxYearAgo, 'year').format(dateFormat)
     var toDate = moment().format(dateFormat);

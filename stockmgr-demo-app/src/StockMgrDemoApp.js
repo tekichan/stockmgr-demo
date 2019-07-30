@@ -23,6 +23,7 @@ require('highcharts/indicators/macd')(Highcharts)
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/modules/map')(Highcharts)
 
+// Basis of Options of Highstock
 const stockOptions = {
   rangeSelector: {
       selected: 2
@@ -72,8 +73,10 @@ const stockOptions = {
   }]
 }
 
+// Create Element for Highcharts
 Highcharts.createElement('link', HIGHCHARTS_ELEMENT, null, document.getElementsByTagName('head')[0]);
 
+// Assign Dark theme to Highcharts
 Highcharts.theme = HIGHCHARTS_DARK_THEME;
 
 // Apply the theme
@@ -104,6 +107,9 @@ class StockMgrDemoApp extends Component {
         this.handleIndicatorChange = this.handleIndicatorChange.bind(this);
     }
 
+    /**
+     * Mount element when the page is ready
+     */
     componentDidMount() {
         this.chartRef = React.createRef();
         this.hsElement = React.createElement(
@@ -118,6 +124,10 @@ class StockMgrDemoApp extends Component {
         ReactDOM.render(this.hsElement, document.getElementById('divHighStock'));
     }
 
+    /**
+     * Handler of Stock Detail to be called
+     * @param _event    Event
+     */
     handleStockDetail(_event) {
         callStockQuoteTa(
             this.state.stockCode
@@ -128,6 +138,10 @@ class StockMgrDemoApp extends Component {
         );
     }
 
+    /**
+     * Handler of Changing Indicator Selector
+     * @param _event    Event
+     */
     handleIndicatorChange(_event) {
         var arr = _event.target.value.split(' ');
         this.setState(
@@ -138,6 +152,10 @@ class StockMgrDemoApp extends Component {
         );
     }
 
+    /**
+     * Plot a chart based on given Highstock data series
+     * @param _hsSeries     Highstock data series
+     */
     plotChart(_hsSeries) {
         var self = this;
         var newChange = {
@@ -161,8 +179,15 @@ class StockMgrDemoApp extends Component {
         ReactDOM.render(this.hsElement, document.getElementById('divHighStock'));
     }
 
+    /**
+     * Processor of Stock Quote and TA
+     * @param _quoteResp    Stock Quote Response
+     * @param _taResp       TA Response
+     */
     processStockQuoteTa(_quoteResp, _taResp) {
         var hsSeries = [];
+
+        // Process Stock Quotes
         var stockPrices = _quoteResp['data'].map(
             (_item, _idx, _arr) => {
                 return [
@@ -174,7 +199,6 @@ class StockMgrDemoApp extends Component {
                 ];
             }
         );
-
         hsSeries.push(
             {
                 type: 'candlestick',
@@ -185,6 +209,8 @@ class StockMgrDemoApp extends Component {
                 yAxis: 0
             }
         );
+
+        // Process Stock Volume
         var volumes = _quoteResp['data'].map(
             (_item, _idx, _arr) => {
                 return [
@@ -205,6 +231,7 @@ class StockMgrDemoApp extends Component {
         );
 
         if (this.state.indicator === 'bband') {
+            // Process Upper BBand
             var upperBBand = _taResp['data'].map(
                 (_item, _idx, _arr) => {
                     return [
@@ -224,6 +251,8 @@ class StockMgrDemoApp extends Component {
                     yAxis: 0
                 }
             );
+
+            // Process Middle BBand
             var middleBBand = _taResp['data'].map(
                 (_item, _idx, _arr) => {
                     return [
@@ -243,6 +272,8 @@ class StockMgrDemoApp extends Component {
                     yAxis: 0
                 }
             );
+
+            // Process Lower BBand
             var lowerBBand = _taResp['data'].map(
                 (_item, _idx, _arr) => {
                     return [
@@ -262,8 +293,10 @@ class StockMgrDemoApp extends Component {
                     yAxis: 0
                 }
             );
+
             console.log('Adding Bollinger Band');
         } else if (this.state.indicator === 'sma') {
+            // Process SMA
             var smaValue = _taResp['data'].map(
                 (_item, _idx, _arr) => {
                     return [
@@ -283,12 +316,17 @@ class StockMgrDemoApp extends Component {
                     , yAxis: 0
                 }
             );
+
             console.log('Adding Simple Moving Average');
         }
 
         this.plotChart(hsSeries);
     }
 
+    /**
+     * Processor of Error Stock Quote
+     * @param _error    Error Response
+     */
     errorStockQuote(_error) {
         console.log(_error);
     }
