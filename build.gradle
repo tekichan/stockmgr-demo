@@ -74,8 +74,13 @@ test {
     exclude 'demo/stockmgr/developers/**'
 }
 
-jar {
-    enabled = true
+bootJar {
+    from('stockmgr-demo-app/build') {
+        // optional path under which output will be visible in Java classpath, e.g. static resources path
+        into 'public'
+    }
+    classifier = 'boot'
+    mainClassName = 'demo.stockmgr.MainApp'
     baseName = rootProject.name
     archiveName = rootProject.name + '.jar'
 }

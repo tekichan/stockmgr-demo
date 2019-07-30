@@ -6,6 +6,6 @@ stockmgr:
     date_pattern: yyyyMMdd
     default_fromdate: 20180101
     timezone: HKT
-    allowed_cors: http://localhost:3000
+    allowed_cors:
   ta:
     default_timeframe: 250

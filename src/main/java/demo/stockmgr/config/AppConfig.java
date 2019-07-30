@@ -42,10 +42,18 @@ public class AppConfig {
         return DateUtils.getDateFromString(rest.getDefaultFromdate(), rest.getDatePattern(), rest.getTimezone());
     }
 
+    /**
+     * Getter of Technical Analysis configuration
+     * @return  Technical Analysis configuration
+     */
     public TaConfig getTa() {
         return ta;
     }
 
+    /**
+     * Setter of Technical Analysis configuration
+     * @param ta    Technical Analysis configuration
+     */
     public void setTa(TaConfig ta) {
         this.ta = ta;
     }

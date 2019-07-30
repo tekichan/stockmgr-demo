@@ -1,0 +1,287 @@
+swagger: "2.0"
+info:
+  description: "This program is to provide stock price quotes and technical analysis indicators via Restful APIs."
+  version: "1.0.0"
+  title: "Stock Manager for Demo"
+  termsOfService: "https://github.com/tekichan/stockmgr-demo/blob/master/LICENSE"
+  contact:
+    email: "tekichan@gmail.com"
+  license:
+    name: "MIT License"
+    url: "https://github.com/tekichan/stockmgr-demo/blob/master/LICENSE"
+externalDocs:
+  description: "Find out more about Stock Manager for Demo"
+  url: "https://github.com/tekichan/stockmgr-demo"    
+host: "localhost"
+basePath: "/rest"
+tags:
+- name: "stock"
+  description: "Stock Quotes"
+- name: "ta"
+  description: "Technical Analysis"
+- name: "version"
+  description: "Version of this application"
+schemes:
+- "http"
+paths:
+  /stock/{stockCode}:
+    get:
+      tags:
+      - "stock"
+      summary: "Get a List of Historical Stock Quote"
+      description: ""
+      operationId: "getStock"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stockCode"
+        in: "path"
+        description: "Stock Code"
+        required: true
+        type: "string"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      - name: "toDate"
+        in: "query"
+        description: "To Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      responses:
+        200:
+          description: "Successful retrieval"
+          schema:
+            $ref: "#/definitions/Stock"
+        400:
+          description: "Bad Request. Parse Exception."
+          schema:
+            $ref: "#/definitions/Exception"  
+        500:
+          description: "Internal Server Error."
+          schema:
+            $ref: "#/definitions/Exception"               
+  /sma/{stockCode}:
+    get:
+      tags:
+      - "ta"
+      summary: "Get a List of Simple Moving Average"
+      externalDocs:
+        description: "Find out more about SMA"
+        url: "https://www.investopedia.com/terms/s/sma.asp"
+      operationId: "getSma"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stockCode"
+        in: "path"
+        description: "Stock Code"
+        required: true
+        type: "string"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      - name: "toDate"
+        in: "query"
+        description: "To Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      - name: "timeFrame"
+        in: "query"
+        description: "Time Frame used by the technical indicator"
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "Successful retrieval"
+          schema:
+            $ref: "#/definitions/Sma"
+        400:
+          description: "Bad Request. Parse Exception."
+          schema:
+            $ref: "#/definitions/Exception"  
+        500:
+          description: "Internal Server Error."
+          schema:
+            $ref: "#/definitions/Exception"                
+  /bband/{stockCode}:
+    get:
+      tags:
+      - "ta"
+      summary: "Get a List of Bollinger Band"
+      externalDocs:
+        description: "Find out more about BBand"
+        url: "https://www.investopedia.com/terms/b/bollingerbands.asp"    
+      operationId: "getBband"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stockCode"
+        in: "path"
+        description: "Stock Code"
+        required: true
+        type: "string"
+      - name: "fromDate"
+        in: "query"
+        description: "From Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      - name: "toDate"
+        in: "query"
+        description: "To Date of Records in yyyyMMdd format"
+        required: false
+        type: "string"
+        format: "yyyyMMdd"
+      - name: "timeFrame"
+        in: "query"
+        description: "Time Frame used by the technical indicator"
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "Successful retrieval"
+          schema:
+            $ref: "#/definitions/BBand"
+        400:
+          description: "Bad Request. Parse Exception."
+          schema:
+            $ref: "#/definitions/Exception"  
+        500:
+          description: "Internal Server Error."
+          schema:
+            $ref: "#/definitions/Exception"                
+  /version:
+    get:
+      tags:
+      - "version"
+      summary: "Get Version of this application"
+      description: ""
+      operationId: "getVersion"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful retrieval"
+          schema:
+            $ref: "#/definitions/Version"            
+definitions:
+  Stock:
+    type: "object"
+    properties:
+      symbol:
+        type: string
+        example: "0001.HK"
+      date:
+        type: string
+        format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        example: "2018-07-29T16:00:00.000+0000"
+      open:
+        type: number
+        example: 84.5
+      low:
+        type: number                  
+        example: 83.5
+      high:
+        type: number 
+        example: 85.5
+      close:
+        type: number 
+        example: 84.5
+      adjClose:
+        type: number
+        example: 84.5
+      volume:
+        type: integer
+        example: 3427961
+  Sma:
+    type: "object"
+    properties:
+      symbol:
+        type: string
+        example: "0001.HK"
+      timeFrame:
+        type: integer
+        example: 250        
+      date:
+        type: string
+        format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        example: "2018-07-29T16:00:00.000+0000"
+      smaValue:
+        type: number
+        example: 84.5
+  BBand:
+    type: "object"
+    properties:
+      symbol:
+        type: string
+        example: "0001.HK"
+      timeFrame:
+        type: integer
+        example: 250        
+      date:
+        type: string
+        format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        example: "2018-07-29T16:00:00.000+0000"
+      upperBBand:
+        type: number
+        example: 86.5
+      middleBBand:
+        type: number
+        example: 85.5
+      lowerBBand:
+        type: number
+        example: 84.5           
+  Version:
+    type: "object"
+    properties:
+      version_info:
+        type: "object"
+        properties:
+          dtap:
+            type: string
+            example: "dev"
+          system_name:
+            type: string
+            example: "stockmgr-demo"
+          version_number:
+            type: string
+            example: "1.0-SNAPSHOT"
+          build_timestamp:
+            type: string
+            format: "yyyy-MM-dd HH:mm:ss"
+            example: "2019-07-30 10:54:04"
+          timestamp:
+            type: string
+            format: "yyyyMMddHHmmss"
+            example: "20190730110610"
+  Exception:
+    type: "object"
+    properties:
+      className:
+        type: string
+        example: "java.io.FileNotFoundException"
+      message:
+        type: string
+        example: "The file cannot be found."
+      stacktraceList:
+        type: array
+        items:
+          type: string
+          example: "sun.reflect.NativeConstr…nstance0(Native Method)"
+      

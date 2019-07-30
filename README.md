@@ -233,3 +233,17 @@ On the frontend side, in order to visualize the stock price data, [Highcharts Re
 The frontend allows to input a Yahoo! Finance code of a stock or an index, as well as to select a Technical Analysis indicator. The chart is refreshed when Refresh button is pressed.
 
 ![StockMgr-Demo](./doc/stockmgr-demo.gif)  
+
+## Appendix B - How to Build
+
+### For Testing Run
+- Spring Boot Backend: `gradle clean build bootRun -Pprofile=dev`
+- React JS Frontend: `npm start`
+
+### For Production Build
+- Build React JS Frontend: `npm run build`
+- Build Spring Boot Backend `gralde cleean build bootJar -Pprofile=prod`
+
+## Appendix C - OpenAPI
+The APIs of the backend are specified in [swagger.yaml](doc/swagger.yaml). 
+ 

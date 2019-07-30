@@ -33,14 +33,20 @@ public class MainApp {
         SpringApplication.run(MainApp.class, args);
     }
 
+    /**
+     * Get Web MVC Configurer for Cross-Origin Resource Sharing
+     * @return  Web MVC Configurer
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 String allowedOrigins = appConfig.getRest().getAllowedCors();
-                logger.info("allowedOrigins: " + allowedOrigins);
-                registry.addMapping(AppConfig.REST_PREFIX + "/**").allowedOrigins(allowedOrigins);
+                if ((allowedOrigins != null) && !allowedOrigins.isEmpty()) {
+                    logger.info("allowedOrigins: " + allowedOrigins);
+                    registry.addMapping(AppConfig.REST_PREFIX + "/**").allowedOrigins(allowedOrigins);
+                }
             }
         };
     }

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import moment from 'moment'
 
-const urlDomain = "http://localhost:8080";
+//const urlDomain = "http://localhost:8080";
+const urlDomain = "";
 const dateFormat = 'YYYYMMDD';
 const maxYearAgo = 5;
 
