@@ -237,12 +237,17 @@ The frontend allows to input a Yahoo! Finance code of a stock or an index, as we
 ## Appendix B - How to Build
 
 ### For Testing Run
+React JS web server and Spring Boot web server run separately. React JS web server uses proxy setting in `package.json` to resolve CORS issue.
+```json
+  "proxy": "http://localhost:8080",
+```
 - Spring Boot Backend: `gradle clean build bootRun -Pprofile=dev`
 - React JS Frontend: `npm start`
 
 ### For Production Build
+Spring Boot gradle build `stockmgr-demo.jar` includes the React JS production build together. 
 - Build React JS Frontend: `npm run build`
-- Build Spring Boot Backend `gralde cleean build bootJar -Pprofile=prod`
+- Build Spring Boot Backend `gralde clean build bootJar -Pprofile=prod`
 
 ## Appendix C - OpenAPI
 The APIs of the backend are specified in [swagger.yaml](doc/swagger.yaml). 
